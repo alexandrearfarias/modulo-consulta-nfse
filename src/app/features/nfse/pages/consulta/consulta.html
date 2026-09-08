@@ -1,2 +1,12 @@
-<h1>Consulta de NFSe</h1>
-<p>consulta works!</p>
+<div class="consulta-container">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Consulta de NFSe</mat-card-title>
+            <mat-card-subtitle>Consulta de notas fiscais de serviço</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+            <app-filtro-consulta (consultar)="consultar($event)" />
+        </mat-card-content>
+    </mat-card>
+</div>

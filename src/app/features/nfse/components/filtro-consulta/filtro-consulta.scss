@@ -1,0 +1,17 @@
+.filtros {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.acoes {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+@media (max-width: 768px) {
+  .filtros {
+    grid-template-columns: 1fr;
+  }
+}
