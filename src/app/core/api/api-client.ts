@@ -8,13 +8,18 @@ import { Observable } from "rxjs";
 export class ApiClient {
     private readonly http = inject(HttpClient);
 
-    get<T>( url: string, params?: Record<string, string | number | boolean>): Observable<T> {
-        let httpParams = new HttpParams();
+    get<T>( url: string, params?: Record<string, string | number | boolean>| HttpParams): Observable<T> {
+        let httpParams: HttpParams;
 
-        if (params) {
-            Object.entries(params).forEach(([key, value]) => {
-                httpParams = httpParams.set(key, String(value));
-            });
+        if (params instanceof HttpParams) {
+            httpParams = params;
+        } else {
+            httpParams = new HttpParams();
+            if (params) {
+                Object.entries(params).forEach(([key, value]) => {
+                    httpParams = httpParams.set(key, String(value));
+                });
+            }
         }
 
         return this.http.get<T>(url, { params: httpParams });

@@ -1,6 +1,6 @@
 export interface FiltrosNfse {
-    dataInicial: string,
-    dataFinal: string,
-    documento: string,
-    numeroNfse: string
+    status: string,
+    adnStatus: string,
+    chaveAcesso: string,
+    externalId: string
 }
