@@ -8,7 +8,27 @@
         <mat-card-content>
             <app-filtro-consulta (consultar)="consultar($event)" />
 
-            @if(nfse().length > 0) {
+            @if(carregando()){
+                <div class="loading-container">
+                    <mat-spinner diameter="40"></mat-spinner>
+                    <span>Consultando NFSe...</span>
+                </div>
+            }
+            @if(erro()) {
+                <div class="erro-container">
+                    <mat-icon>error_outline</mat-icon>
+                    <span>{{ erro() }}</span>
+                </div>
+            }
+            @if (!carregando() && nfse().length === 0 && filtrosAtuais()) {
+                <div class="empty-contanier">
+                    <mat-icon>search_off</mat-icon>
+                    <h3>Nenhuma NFSe encontrada.</h3>
+                    <p>Não encontramos nenhuma NFSe para os filtros informados.</p>
+                </div>
+            }
+
+            @if(!carregando() && nfse().length > 0) {
                 <div class="table-container">
                     <table mat-table [dataSource]="nfse()" class="nfse-table">
                         <ng-container matColumnDef="numero">

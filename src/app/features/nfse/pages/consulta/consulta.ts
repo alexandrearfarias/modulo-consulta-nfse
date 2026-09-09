@@ -10,9 +10,11 @@ import { MatTableModule } from '@angular/material/table';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { NfseListParams } from '../../models/nfse-list-params';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  imports: [MatCardModule, FiltroConsulta, MatTableModule, CurrencyPipe, DatePipe, MatPaginatorModule],
+  imports: [MatCardModule, FiltroConsulta, MatTableModule, CurrencyPipe, DatePipe, MatPaginatorModule, MatProgressSpinnerModule, MatIconModule],
   selector: 'app-consulta',
   styleUrl: './consulta.scss',
   templateUrl: './consulta.html',
@@ -27,6 +29,7 @@ export class Consulta {
   protected readonly carregando = signal(false);
   protected readonly total = signal(0);
   protected readonly filtrosAtuais = signal<FiltrosNfse|null>(null);
+  protected readonly erro = signal<string | null>(null);
 
   // paginação
   protected readonly paginaAtual = signal(0);
@@ -45,6 +48,8 @@ export class Consulta {
     const filtros = this.filtrosAtuais();
     if (!filtros) { return; }
 
+    this.erro.set(null);
+    this.nfse.set([]);
     this.carregando.set(true);
 
     const params: NfseListParams = {
@@ -69,6 +74,7 @@ export class Consulta {
       },
       error: err => {
         this.carregando.set(false);
+        this.erro.set("Não foi possível consultar as NFSe. Tente novamente.");
         console.error('Erro ao consultar', err);
       }
     });
