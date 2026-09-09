@@ -17,11 +17,11 @@ export class AuthService {
             return of({
                 access_token: this.accessToken,
                 token_type: 'Bearer',
-                expires_in: Math.floor(this.expiration - Date.now() / 1000)
+                expires_in: Math.floor((this.expiration - Date.now()) / 1000)
             });
         }
 
-        const credentials = btoa(`${environment.oauth.clientId}:${environment.oauth.clietSecret}`);
+        const credentials = btoa(`${environment.oauth.clientId}:${environment.oauth.clientSecret}`);
 
         const headers = new HttpHeaders({
             Authorization: `Basic ${credentials}`,
@@ -42,6 +42,10 @@ export class AuthService {
     }
 
     getToken(): string | null {
+        if (!this.accessToken || !this.expiration || Date.now() >= this.expiration) {
+            return null;
+        }
+
         return this.accessToken;
     }
 

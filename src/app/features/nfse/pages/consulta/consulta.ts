@@ -4,7 +4,6 @@ import { FiltroConsulta } from '../../components/filtro-consulta/filtro-consulta
 import { FiltrosNfse } from '../../models/filtros-nfse';
 import { NFSeService } from '../../services/nfse.sevice';
 import { AuthService } from '../../../../core/auth/auth.service';
-import { switchMap } from 'rxjs';
 import { Nfse } from '../../models/nfse';
 import { MatTableModule } from '@angular/material/table';
 import { CurrencyPipe, DatePipe } from '@angular/common';
@@ -62,10 +61,7 @@ export class Consulta {
       external_id: filtros.externalId
     };
 
-    this.auth.obterToken()
-    .pipe(switchMap(() => 
-      this.service.listar(params)
-    ))
+    this.service.listar(params)
     .subscribe({
       next: (resposta) => {
         this.nfse.set(resposta.data);
