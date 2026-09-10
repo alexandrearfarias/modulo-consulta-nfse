@@ -11,9 +11,22 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { NfseListParams } from '../../models/nfse-list-params';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
+import { MatChipsModule } from '@angular/material/chips';
+import { DocumentPipe } from '../../../../shared/pipes/document.pipe';
 
 @Component({
-  imports: [MatCardModule, FiltroConsulta, MatTableModule, CurrencyPipe, DatePipe, MatPaginatorModule, MatProgressSpinnerModule, MatIconModule],
+  imports: [
+    MatCardModule, 
+    FiltroConsulta, 
+    MatTableModule, 
+    CurrencyPipe, 
+    DatePipe, 
+    MatPaginatorModule, 
+    MatProgressSpinnerModule, 
+    MatIconModule, 
+    MatChipsModule, 
+    DocumentPipe
+  ],
   selector: 'app-consulta',
   styleUrl: './consulta.scss',
   templateUrl: './consulta.html',
@@ -38,10 +51,35 @@ export class Consulta {
     'numero',
     'emissao',
     'prestador',
+    'cpf_cnpj_prestador',
     'tomador',
+    'cpf_cnpj_tomador',
     'valor',
     'status'
   ];
+
+  // mapping de valores
+  protected getStatusLabel(status: Nfse['status']): string {
+    const labels: Record<Nfse['status'], string> = {
+      processing: 'Em processamento',
+      issued: 'Emitida',
+      rejected: 'Rejeitada',
+      canceled: 'Cancelada',
+      substituted: 'Substituída',
+      error: 'Erro'
+    };
+    return labels[status];
+  }
+
+  protected getAdnStatusLabel(status: Nfse['adn_status']): string {
+    const labels: Record<Nfse['adn_status'], string> = {
+      peding: 'Pendente',
+      shared: 'Compartilhada',
+      rejected: 'Rejeitada',
+      error: 'Erro'
+    };
+    return labels[status];
+  }
 
   protected executarConsulta(): void {
     const filtros = this.filtrosAtuais();
