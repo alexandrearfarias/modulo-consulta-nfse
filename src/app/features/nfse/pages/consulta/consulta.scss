@@ -8,6 +8,32 @@ mat-card {
     width: 100%;
 }
 
+.filtros-acoes {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+
+    app-filtro-consulta {
+        flex: 1;
+        min-width: 0;
+    }
+
+    > button {
+        flex-shrink: 0;
+        margin-top: 8px;
+    }
+}
+
 .table-container {
     margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+    .filtros-acoes {
+        flex-direction: column;
+
+        > button {
+            align-self: flex-end;
+        }
+    }
 }

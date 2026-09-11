@@ -1,7 +1,9 @@
 .filtros {
-  display: grid;
+  display: flex;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
+  align-items: baseline;
+  width: 100%;
 
   mat-form-field {
     --mat-form-field-container-height: 40px;

@@ -6,7 +6,13 @@
         </mat-card-header>
 
         <mat-card-content>
-            <app-filtro-consulta (consultar)="consultar($event)" />
+            <div class="filtros-acoes">
+                <app-filtro-consulta (consultar)="consultar($event)" />
+
+                <button mat-raised-button type="button" (click)="sincronizar()">
+                    <mat-icon>sync</mat-icon> Sincronizar NFs-e
+                </button>
+            </div>
 
             @if(carregando()){
                 <div class="loading-container">
