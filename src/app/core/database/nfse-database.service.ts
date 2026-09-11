@@ -1,13 +1,17 @@
 import { Injectable } from "@angular/core";
 import { Nfse } from "../../features/nfse/models/nfse";
+import { NfseMetadata } from "./nfse-metadata";
+
+// * Para relembrar: Store = tabela para o IndexedDB
 
 @Injectable({
     providedIn: 'root'
 })
 export class NFSeDatabaseService {
     private readonly dbName = 'nfse_moduledb';
-    private readonly dbVersion = 2;
+    private readonly dbVersion = 3;
     private readonly nfseStore = 'nfse';
+    private readonly metadataStore = 'metadata';
     
     private db?: IDBDatabase;
 
@@ -23,6 +27,12 @@ export class NFSeDatabaseService {
                 const db = request.result;
                 let store: IDBObjectStore;
 
+                // criação da tabela de metadata 
+                if (!db.objectStoreNames.contains(this.metadataStore)) {
+                    db.createObjectStore(this.metadataStore, { keyPath: 'chave' });
+                }
+
+                // criação da tabela de nfse
                 if (!db.objectStoreNames.contains(this.nfseStore)) {
                     store = db.createObjectStore(this.nfseStore, { keyPath: 'id' });
                 } else {
@@ -146,6 +156,40 @@ export class NFSeDatabaseService {
             request.onerror = () => {
                 reject(request.error);
             };
+        });
+    }
+
+    async salvarMetadata(chave: string, valor: string): Promise<void> {
+        const db = await this.abrir();
+
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(this.metadataStore, 'readwrite');
+            const store = transaction.objectStore(this.metadataStore);
+            const metadata: NfseMetadata = { chave, valor };
+
+            store.put(metadata);
+
+            transaction.oncomplete = () => resolve();
+            transaction.onerror = () => reject(transaction.error);
+        });
+    }
+
+    async buscaMetadata(chave: string): Promise<string | undefined> {
+        const db = await this.abrir();
+
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(this.metadataStore, 'readonly');
+            const store = transaction.objectStore(this.metadataStore);
+
+            const request = store.get(chave);
+
+            request.onsuccess = () => {
+                const metadata = request.result as NfseMetadata | undefined;
+                resolve(metadata?.valor);
+            };
+            request.onerror = () => {
+                reject(request.error);
+            }
         });
     }
 }

@@ -47,6 +47,8 @@ export class NfseQueryService {
             return true;
         });
 
+        resultado.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
         // paginação
         const total = resultado.length;
         const inicio = pagina * tamanhoPagina;
