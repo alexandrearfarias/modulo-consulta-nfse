@@ -3,7 +3,7 @@ import { ApiClient } from "../../../core/api/api-client";
 import { Observable } from "rxjs";
 import { NfseResponse } from "../models/nfse-response";
 import { NfseListParams } from "../models/nfse-list-params";
-import { HttpParams, HttpClient } from "@angular/common/http";
+import { HttpParams } from "@angular/common/http";
 
 @Injectable({
     providedIn: 'root'
