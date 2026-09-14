@@ -40,6 +40,7 @@ export class NfseSyncService {
             pagina++;
         }
 
+        await this.database.salvarMetadata('utlimaSincronizacao', new Date().toISOString())
         return totalSalvo;
     }
 }

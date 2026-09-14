@@ -13,6 +13,7 @@ import { DocumentPipe } from '../../../../shared/pipes/document.pipe';
 import { NfseSyncService } from '../../services/nfse-sync.service';
 import { MatAnchor } from '@angular/material/button';
 import { NfseQueryService } from '../../services/nfse-query.service';
+import { NFSeDatabaseService } from '../../../../core/database/nfse-database.service';
 
 @Component({
   imports: [
@@ -36,6 +37,7 @@ export class Consulta {
   // injeção de dependencias
   private readonly syncService = inject(NfseSyncService);
   private readonly queryService = inject(NfseQueryService);
+  private readonly databaseService = inject(NFSeDatabaseService);
 
   // parametros e objetos
   protected readonly nfse = signal<Nfse[]>([]);
@@ -59,7 +61,7 @@ export class Consulta {
     'status'
   ];
 
-  // mapping de valores
+  // funções auxiliares
   protected getStatusLabel(status: Nfse['status']): string {
     const labels: Record<Nfse['status'], string> = {
       processing: 'Em processamento',
@@ -82,7 +84,10 @@ export class Consulta {
     return labels[status];
   }
 
+  // ações da tabela 
   protected sincronizar(): void {
+    if ( this.carregando()) return;
+
     this.carregando.set(true);
     this.erro.set(null);
 
@@ -99,6 +104,8 @@ export class Consulta {
   }
 
   protected executarConsulta(): void {
+    if ( this.carregando()) return;
+
     const filtros = this.filtrosAtuais();
     if (!filtros) { return; }
 
@@ -118,33 +125,10 @@ export class Consulta {
     .finally(() => {
       this.carregando.set(false);
     });
-
-    // const params: NfseListParams = {
-    //   top: this.tamanhoPagina(),
-    //   skip: this.paginaAtual() * this.tamanhoPagina(),
-
-    //   status: filtros.status,
-    //   adn_status: filtros.adnStatus,
-    //   chave_acesso: filtros.chaveAcesso,
-    //   external_id: filtros.externalId
-    // };
-
-    // this.service.listar(params)
-    // .subscribe({
-    //   next: (resposta) => {
-    //     this.nfse.set(resposta.data);
-    //     this.total.set(resposta['@count']?? resposta.data.length);
-    //     this.carregando.set(false);
-    //   },
-    //   error: err => {
-    //     this.carregando.set(false);
-    //     this.erro.set("Não foi possível consultar as NFSe. Tente novamente.");
-    //     console.error('Erro ao consultar', err);
-    //   }
-    // });
   }
 
   protected consultar(filtros: FiltrosNfse | null): void{
+    if ( this.carregando()) return;
     this.filtrosAtuais.set(filtros);
     this.paginaAtual.set(0);
 
@@ -152,6 +136,7 @@ export class Consulta {
   }
 
   protected mudarPagina(event: PageEvent): void {
+    if ( this.carregando()) return;
     this.paginaAtual.set(event.pageIndex);
     this.tamanhoPagina.set(event.pageSize);
 

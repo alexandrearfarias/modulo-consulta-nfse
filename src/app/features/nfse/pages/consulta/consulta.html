@@ -9,7 +9,7 @@
             <div class="filtros-acoes">
                 <app-filtro-consulta (consultar)="consultar($event)" />
 
-                <button mat-raised-button type="button" (click)="sincronizar()">
+                <button mat-raised-button type="button" [disabled]="carregando()" (click)="sincronizar()">
                     <mat-icon>sync</mat-icon> Sincronizar NFs-e
                 </button>
             </div>
@@ -77,6 +77,7 @@
                     </table>
                     <mat-paginator
                         [length]="total()"
+                        [disabled]="carregando()"
                         [pageIndex]="paginaAtual()"
                         [pageSize]="tamanhoPagina()"
                         [pageSizeOptions]="[10, 25, 50, 100]"
