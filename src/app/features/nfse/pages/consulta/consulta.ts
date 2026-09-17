@@ -43,6 +43,7 @@ export class Consulta implements OnInit {
 
   // parametros e objetos
   protected readonly nfse = signal<Nfse[]>([]);
+  protected readonly sincronizando = signal(false);
   protected readonly carregando = signal(false);
   protected readonly total = signal(0);
   protected readonly filtrosAtuais = signal<FiltrosNfse|null>(null);
@@ -93,14 +94,15 @@ export class Consulta implements OnInit {
 
   // ações da tabela 
   protected async sincronizar(): Promise<void> {
-    if ( this.carregando()) return;
+    if ( this.sincronizando()) return;
 
-    this.carregando.set(true);
+    this.sincronizando.set(true);
     this.erro.set(null);
 
     try {
       const resultado = await this.syncService.sincronizarTudo();
       await this.carregaUltimaSync();
+      await this.executarConsulta();
 
       this.snackBar.open(
         `${resultado.novas} novas e ${resultado.atualizadas} atualizadas`, 
@@ -110,11 +112,11 @@ export class Consulta implements OnInit {
     } catch (error) {
       console.error('Erro na sincronização', error);
     } finally {
-      this.carregando.set(false);
+      this.sincronizando.set(false);
     }
   }
 
-  protected executarConsulta(): void {
+  protected async executarConsulta(): Promise<void> {
     if ( this.carregando()) return;
 
     const filtros = this.filtrosAtuais();
@@ -124,18 +126,16 @@ export class Consulta implements OnInit {
     this.nfse.set([]);
     this.carregando.set(true);
 
-    this.queryService.consultar(filtros, this.paginaAtual(), this.tamanhoPagina())
-    .then(resultado => {
+    try {
+      const resultado = await this.queryService.consultar(filtros, this.paginaAtual(), this.tamanhoPagina());
       this.nfse.set(resultado.data);
       this.total.set(resultado.total);
-    })
-    .catch(err => {
-      this.erro.set('Não foi possível consultar as NFS-e.');
-      console.error('Erro ao consultar NFSe', err);
-    })
-    .finally(() => {
+    } catch (error) {
+      this.erro.set('Não foi possível consultar as NFSe');
+      console.error('Erro ao consultar NFSe', error);
+    } finally {
       this.carregando.set(false);
-    });
+    }
   }
 
   protected consultar(filtros: FiltrosNfse | null): void{

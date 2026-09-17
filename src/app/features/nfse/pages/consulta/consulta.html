@@ -12,8 +12,9 @@
                 @if (ultimaSync(); as ultima) {
                     <span> Útlima Sincronização: {{ ultima | date: 'dd/MM/yyyy HH:mm:ss' }}</span>
                 }
-                <button mat-raised-button type="button" [disabled]="carregando()" (click)="sincronizar()">
-                    <mat-icon>sync</mat-icon> Sincronizar NFs-e
+                <button mat-raised-button type="button" [disabled]="sincronizando()" (click)="sincronizar()">
+                    <mat-icon>sync</mat-icon> 
+                    {{ sincronizando() ? 'Sincronizando...' : 'Sincronizar NFS-e' }}
                 </button>
             </div>
 
