@@ -20,19 +20,13 @@ export class NfseSyncService {
         };
 
         const resposta = await firstValueFrom(this.nfseService.listar(params));
+        const ids = resposta.data.map(nfse => nfse.id); 
+        const existentes = await this.database.buscarMuitos(ids);
 
-        let novas = 0;
-        let atualizadas = 0;
-        for(const nfse of resposta.data) {
-            const existente = await this.database.buscar(nfse.id);
-            if (existente) {
-                atualizadas++;
-            } else {
-                novas++
-            }
-
-            await this.database.salvar(nfse);
-        }
+        const novas = resposta.data.length - existentes.length;
+        const atualizadas = existentes.length;
+    
+        await this.database.salvarMuitos(resposta.data);
 
         return { 
             recebidas: resposta.data.length,

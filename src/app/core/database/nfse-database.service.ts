@@ -88,6 +88,22 @@ export class NFSeDatabaseService {
         });
     }
 
+    async salvarMuitos(nfses:Nfse[]): Promise<void> {
+        const db = await this.abrir();
+
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(this.nfseStore, 'readwrite');
+            const store = transaction.objectStore(this.nfseStore);
+
+            for(const nfse of nfses) {
+                store.put(nfse);
+            }
+
+            transaction.oncomplete = () => resolve();
+            transaction.onerror = () => reject(transaction.error); 
+        });
+    }
+
     async buscar(id: string): Promise<Nfse | undefined> {
         const db = await this.abrir();
 
@@ -102,6 +118,40 @@ export class NFSeDatabaseService {
             request.onerror = () => {
                 reject(request.error);
             };
+        });
+    }
+
+    async buscarMuitos(ids: string[]): Promise<Nfse[]> {
+        const db = await this.abrir();
+
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(this.nfseStore, 'readonly');
+            const store = transaction.objectStore(this.nfseStore);
+            const encontrados: Nfse[] = [];
+
+            let pendentes = ids.length;
+            if (pendentes === 0) {
+                resolve([]);
+                return;
+            }
+            for (const id of ids) {
+                const request = store.get(id);
+
+                request.onsuccess = () => {
+                    if (request.result) {
+                        encontrados.push(request.result);
+                    }
+                    pendentes --;
+                    
+                    if (pendentes === 0) {
+                        resolve(encontrados);
+                    }
+                }
+                request.onerror = () => {
+                    reject(request.error);
+                }
+            }
+
         });
     }
 
