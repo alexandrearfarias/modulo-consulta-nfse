@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { FiltroConsulta } from '../../components/filtro-consulta/filtro-consulta';
 import { FiltrosNfse } from '../../models/filtros-nfse';
@@ -14,6 +14,7 @@ import { NfseSyncService } from '../../services/nfse-sync.service';
 import { MatAnchor } from '@angular/material/button';
 import { NfseQueryService } from '../../services/nfse-query.service';
 import { NFSeDatabaseService } from '../../../../core/database/nfse-database.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   imports: [
@@ -33,11 +34,12 @@ import { NFSeDatabaseService } from '../../../../core/database/nfse-database.ser
   styleUrl: './consulta.scss',
   templateUrl: './consulta.html',
 })
-export class Consulta {
+export class Consulta implements OnInit {
   // injeção de dependencias
   private readonly syncService = inject(NfseSyncService);
   private readonly queryService = inject(NfseQueryService);
   private readonly databaseService = inject(NFSeDatabaseService);
+  private readonly snackBar = inject(MatSnackBar);
 
   // parametros e objetos
   protected readonly nfse = signal<Nfse[]>([]);
@@ -45,6 +47,7 @@ export class Consulta {
   protected readonly total = signal(0);
   protected readonly filtrosAtuais = signal<FiltrosNfse|null>(null);
   protected readonly erro = signal<string | null>(null);
+  protected readonly ultimaSync = signal<string | null>(null);
 
   // paginação
   protected readonly paginaAtual = signal(0);
@@ -60,6 +63,10 @@ export class Consulta {
     'valor',
     'status'
   ];
+
+  ngOnInit(): void {
+    this.carregaUltimaSync();
+  }
 
   // funções auxiliares
   protected getStatusLabel(status: Nfse['status']): string {
@@ -85,22 +92,26 @@ export class Consulta {
   }
 
   // ações da tabela 
-  protected sincronizar(): void {
+  protected async sincronizar(): Promise<void> {
     if ( this.carregando()) return;
 
     this.carregando.set(true);
     this.erro.set(null);
 
-    this.syncService.sincronizarTudo()
-    .then(quantidade => {
-      console.log(`Sincronização concluida. ${quantidade} NFSe processadas.`);
-    })
-    .catch(err => {
-      console.error('Erro na sincronização', err);
-    })
-    .finally(() => {
+    try {
+      const resultado = await this.syncService.sincronizarTudo();
+      await this.carregaUltimaSync();
+
+      this.snackBar.open(
+        `${resultado.novas} novas e ${resultado.atualizadas} atualizadas`, 
+        'Fechar', 
+        { duration: 4000, verticalPosition: 'top' }
+      );
+    } catch (error) {
+      console.error('Erro na sincronização', error);
+    } finally {
       this.carregando.set(false);
-    });
+    }
   }
 
   protected executarConsulta(): void {
@@ -141,5 +152,11 @@ export class Consulta {
     this.tamanhoPagina.set(event.pageSize);
 
     this.executarConsulta();
+  }
+
+  protected async carregaUltimaSync(): Promise<void> {
+    const valor = await this.databaseService.buscaMetadata('ultimaSincronizacao');
+
+    this.ultimaSync.set(valor ?? null);
   }
 }
