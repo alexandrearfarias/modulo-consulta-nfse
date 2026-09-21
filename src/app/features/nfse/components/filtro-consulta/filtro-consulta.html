@@ -21,10 +21,18 @@
             </mat-select>
         </mat-form-field>
         <mat-form-field appearance="outline">
-            <mat-label>Chave de Acesso</mat-label>
-            <input matInput type="text" formControlName="chaveAcesso">
+            <mat-label>Data Inicial</mat-label>
+            <input matInput [matDatepicker]="dataInicialPicker" formControlName="dataInicial">
+            <mat-datepicker-toggle matIconSuffix [for]="dataInicialPicker"></mat-datepicker-toggle>
+            <mat-datepicker #dataInicialPicker></mat-datepicker>
         </mat-form-field>
-
+        <mat-form-field appearance="outline">
+            <mat-label>Data Final</mat-label>
+            <input matInput [matDatepicker]="dataFinalPicker" formControlName="dataFinal">
+            <mat-datepicker-toggle matIconSuffix [for]="dataFinalPicker"></mat-datepicker-toggle>
+            <mat-datepicker #dataFinalPicker></mat-datepicker>
+        </mat-form-field>
+        
         <div class="acoes">
             <button matButton="filled" type="submit">Consultar</button>
         </div>

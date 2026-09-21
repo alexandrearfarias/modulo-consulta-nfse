@@ -30,6 +30,13 @@
                     <span>{{ erro() }}</span>
                 </div>
             }
+            @if (!carregando() && !erro() && !filtrosAtuais() && nfse().length === 0) {
+                <div class="empty-container">
+                    <mat-icon>move_to_inbox</mat-icon>
+                    <h3>Nenhuma consulta realizada</h3>
+                    <p>Sincronize as NFS-e para carregar os dados ou informe filtros para realizar uma consulta.</p>
+                </div>
+            }
             @if (!carregando() && nfse().length === 0 && filtrosAtuais()) {
                 <div class="empty-contanier">
                     <mat-icon>search_off</mat-icon>

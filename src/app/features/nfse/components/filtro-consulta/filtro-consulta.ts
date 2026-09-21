@@ -5,9 +5,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FiltrosNfse } from '../../models/filtros-nfse';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
-  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule],
+  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatDatepickerModule, MatNativeDateModule],
   selector: 'app-filtro-consulta',
   styleUrl: './filtro-consulta.scss',
   templateUrl: './filtro-consulta.html',
@@ -16,8 +18,15 @@ export class FiltroConsulta {
   protected readonly form = new FormGroup({
     status: new FormControl<string>(''),
     adnStatus: new FormControl<string>(''),
+
     chaveAcesso: new FormControl<string>(''),
-    externalId: new FormControl<string>('')
+    externalId: new FormControl<string>(''),
+
+    dataInicial: new FormControl<Date | null>(null),
+    dataFinal: new FormControl<Date | null>(null),
+
+    prestadorCpfCnpj: new FormControl<string>(''),
+    tomadorCpfCnpj: new FormControl<string>('')
   });
 
   protected readonly statusOptions = [
@@ -41,8 +50,26 @@ export class FiltroConsulta {
     this.consultar.emit({
       status: this.form.controls.status.value ?? '',
       adnStatus: this.form.controls.adnStatus.value ?? '',
+
       chaveAcesso: this.form.controls.chaveAcesso.value ?? '',
-      externalId: this.form.controls.externalId.value ?? ''
+      externalId: this.form.controls.externalId.value ?? '',
+
+      dataInicial: this.formatarData(this.form.controls.dataInicial.value),
+      dataFinal: this.formatarData(this.form.controls.dataFinal.value),
+
+      prestadorCpfCnpj: this.form.controls.prestadorCpfCnpj.value ?? '',
+      tomadorCpfCnpj: this.form.controls.tomadorCpfCnpj.value ?? ''
     });
+  }
+
+  // auxiliar
+  private formatarData(data: Date | null): string | undefined {
+    if (!data) { return undefined; }
+
+    const ano = data.getFullYear();
+    const mes = String(data.getMonth() +1).padStart(2, '0');
+    const dia = String(data.getDate()).padStart(2, '0');
+
+    return `${ano}-${mes}-${dia}`;
   }
 }
