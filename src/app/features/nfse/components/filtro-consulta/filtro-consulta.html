@@ -32,9 +32,18 @@
             <mat-datepicker-toggle matIconSuffix [for]="dataFinalPicker"></mat-datepicker-toggle>
             <mat-datepicker #dataFinalPicker></mat-datepicker>
         </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Prestador CPF/CNPJ</mat-label>
+            <input matInput formControlName="prestadorCpfCnpj">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Tomador CPF/CNPJ</mat-label>
+            <input matInput formControlName="tomadorCpfCnpj">
+        </mat-form-field>
         
         <div class="acoes">
             <button matButton="filled" type="submit">Consultar</button>
+            <button matButton="filled" type="button" (click)="limpar()">Limpar Filtros</button>
         </div>
     </div>
 </form>

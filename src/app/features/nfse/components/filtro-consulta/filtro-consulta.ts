@@ -6,10 +6,11 @@ import { MatInputModule } from '@angular/material/input';
 import { FiltrosNfse } from '../../models/filtros-nfse';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
 
 @Component({
-  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatDatepickerModule, MatNativeDateModule],
+  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatDatepickerModule],
+  providers: [provideNativeDateAdapter(), { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' }],
   selector: 'app-filtro-consulta',
   styleUrl: './filtro-consulta.scss',
   templateUrl: './filtro-consulta.html',
@@ -57,9 +58,22 @@ export class FiltroConsulta {
       dataInicial: this.formatarData(this.form.controls.dataInicial.value),
       dataFinal: this.formatarData(this.form.controls.dataFinal.value),
 
-      prestadorCpfCnpj: this.form.controls.prestadorCpfCnpj.value ?? '',
-      tomadorCpfCnpj: this.form.controls.tomadorCpfCnpj.value ?? ''
+      prestadorCpfCnpj: this.formatarCpfCnpj(this.form.controls.prestadorCpfCnpj.value),
+      tomadorCpfCnpj: this.formatarCpfCnpj(this.form.controls.tomadorCpfCnpj.value)
     });
+  }
+
+  protected limpar(): void {
+    this.form.reset();
+
+    this.consultar.emit({
+      status: '',
+      adnStatus: '',
+      chaveAcesso: '',
+      externalId: '',
+      dataInicial: undefined,
+      dataFinal: undefined,
+    })
   }
 
   // auxiliar
@@ -71,5 +85,10 @@ export class FiltroConsulta {
     const dia = String(data.getDate()).padStart(2, '0');
 
     return `${ano}-${mes}-${dia}`;
+  }
+
+  private formatarCpfCnpj(value: string | null): string | undefined {
+    if (!value) { return undefined; }
+    return value.replace(/[^0-9a-zA-Z]/g, '');
   }
 }

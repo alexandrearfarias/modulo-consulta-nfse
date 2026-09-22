@@ -13,7 +13,7 @@ export class NfseQueryService {
     async consultar(filtros: FiltrosNfse, pagina = 0, tamanhoPagina = 10): Promise<ResultadoConsultaNfse> {
         // filtragem principal
         let resultado: Nfse[];
-        if (filtros.dataInicial && filtros.dataFinal) {
+        if (filtros.dataInicial || filtros.dataFinal) {
             resultado = await this.database.buscarPorPeriodo(filtros.dataInicial, filtros.dataFinal);
         }
         else if (filtros.status) {

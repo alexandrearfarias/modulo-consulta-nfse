@@ -1,6 +1,6 @@
 .filtros {
-  display: flex;
-  grid-template-columns: repeat(2, 1fr);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 16px;
   align-items: baseline;
   width: 100%;
@@ -13,8 +13,7 @@
 
 .acoes {
   display: flex;
-  justify-content: flex-end;
-  margin-top: 8px;
+  gap: 8px;
 }
 
 @media (max-width: 768px) {

@@ -190,14 +190,26 @@ export class NFSeDatabaseService {
         });
     }
 
-    async buscarPorPeriodo(dtInicial: string, dtFinal: string): Promise<Nfse[]> {
+    async buscarPorPeriodo(dtInicial?: string, dtFinal?: string): Promise<Nfse[]> {
         const db = await this.abrir();
 
         return new Promise((resolve, reject) => {
             const transaction = db.transaction(this.nfseStore, 'readonly');
             const store = transaction.objectStore(this.nfseStore);
             const index = store.index('dh_emi');
-            const range = IDBKeyRange.bound(dtInicial, dtFinal);
+            let range: IDBKeyRange | undefined;
+            
+            if (dtInicial && dtFinal) {
+                const ini = new Date(`${dtInicial}T00:00:00`);
+                const fin = new Date(`${dtFinal}T23:59:59`);
+                range = IDBKeyRange.bound(ini.toISOString(), fin.toISOString());
+            } else if (dtInicial) {
+                const ini = new Date(`${dtInicial}T00:00:00`);
+                range = IDBKeyRange.lowerBound(ini.toISOString());
+            } else if (dtFinal) {
+                const fin = new Date(`${dtFinal}T23:59:59`);
+                range = IDBKeyRange.upperBound(fin.toISOString());
+            }
 
             const request = index.getAll(range);
             request.onsuccess = () => {

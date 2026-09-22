@@ -9,6 +9,7 @@
             <div class="filtros-acoes">
                 <app-filtro-consulta (consultar)="consultar($event)" />
 
+                <div class="sincronizacao">
                 @if (ultimaSync(); as ultima) {
                     <span> Útlima Sincronização: {{ ultima | date: 'dd/MM/yyyy HH:mm:ss' }}</span>
                 }
@@ -16,6 +17,7 @@
                     <mat-icon>sync</mat-icon> 
                     {{ sincronizando() ? 'Sincronizando...' : 'Sincronizar NFS-e' }}
                 </button>
+                </div>
             </div>
 
             @if(carregando()){
