@@ -31,6 +31,9 @@
             <input matInput [matDatepicker]="dataFinalPicker" formControlName="dataFinal">
             <mat-datepicker-toggle matIconSuffix [for]="dataFinalPicker"></mat-datepicker-toggle>
             <mat-datepicker #dataFinalPicker></mat-datepicker>
+            @if(periodoInvalido()) {
+                <mat-error>A data Final deve ser igual ou posterior a data inicial</mat-error>
+            }
         </mat-form-field>
         <mat-form-field appearance="outline">
             <mat-label>Prestador CPF/CNPJ</mat-label>

@@ -12,16 +12,7 @@ export class NfseQueryService {
 
     async consultar(filtros: FiltrosNfse, pagina = 0, tamanhoPagina = 10): Promise<ResultadoConsultaNfse> {
         // filtragem principal
-        let resultado: Nfse[];
-        if (filtros.dataInicial || filtros.dataFinal) {
-            resultado = await this.database.buscarPorPeriodo(filtros.dataInicial, filtros.dataFinal);
-        }
-        else if (filtros.status) {
-            resultado = await this.database.buscarPorStatus(filtros.status);
-        }
-        else {
-            resultado = await this.database.listar();
-        }
+        let resultado = await this.buscarDados(filtros);
 
         // filtragem secundaria
         resultado = resultado.filter(nfse => {
@@ -56,5 +47,15 @@ export class NfseQueryService {
         const data = resultado.slice(inicio, fim);
 
         return { data, total };
+    }
+
+    private buscarDados(filtros: FiltrosNfse): Promise<Nfse[]> {
+        if (filtros.dataInicial || filtros.dataFinal) {
+            return this.database.buscarPorPeriodo(filtros.dataInicial, filtros.dataFinal);
+        }
+        if (filtros.status) {
+            return this.database.buscarPorStatus(filtros.status);
+        }
+        return this.database.listar();
     }
 }

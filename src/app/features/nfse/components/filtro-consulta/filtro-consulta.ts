@@ -1,4 +1,4 @@
-import { Component, output } from '@angular/core';
+import { Component, output, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -46,14 +46,30 @@ export class FiltroConsulta {
    ];
 
   protected readonly consultar = output<FiltrosNfse>();
+  protected readonly periodoInvalido = signal(false);
 
+  constructor() {
+    this.form.controls.dataInicial.valueChanges.subscribe(() => {
+      this.validarPeriodo();
+    });
+
+    this.form.controls.dataFinal.valueChanges.subscribe(() => {
+      this.validarPeriodo();
+    });
+  }
+
+  // ações do componente
   protected enviar(): void {
+    if (this.validarPeriodo()) {
+      return;
+    }
+
     this.consultar.emit({
       status: this.form.controls.status.value ?? '',
       adnStatus: this.form.controls.adnStatus.value ?? '',
 
-      chaveAcesso: this.form.controls.chaveAcesso.value ?? '',
-      externalId: this.form.controls.externalId.value ?? '',
+      chaveAcesso: this.form.controls.chaveAcesso.value?.trim() ?? '',
+      externalId: this.form.controls.externalId.value?.trim() ?? '',
 
       dataInicial: this.formatarData(this.form.controls.dataInicial.value),
       dataFinal: this.formatarData(this.form.controls.dataFinal.value),
@@ -85,6 +101,23 @@ export class FiltroConsulta {
     const dia = String(data.getDate()).padStart(2, '0');
 
     return `${ano}-${mes}-${dia}`;
+  }
+
+  private validarPeriodo(): boolean {
+    const dataInicial = this.form.controls.dataInicial.value;
+    const dataFinal = this.form.controls.dataFinal;
+    const periodoInvalido = !!dataInicial && !!dataFinal.value && dataInicial > dataFinal.value;
+    this.periodoInvalido.set(periodoInvalido);
+
+    const errors = dataFinal.errors ?? {};
+    if (periodoInvalido) {
+      dataFinal.setErrors({ ...errors, periodoInvalido: true });
+    } else if (errors['periodoInvalido']) {
+      const { periodoInvalido: _, ...outrosErros } = errors;
+      dataFinal.setErrors(Object.keys(outrosErros).length ? outrosErros : null);
+    }
+
+    return periodoInvalido;
   }
 
   private formatarCpfCnpj(value: string | null): string | undefined {
