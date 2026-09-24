@@ -11,7 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { DocumentPipe } from '../../../../shared/pipes/document.pipe';
 import { NfseSyncService } from '../../services/nfse-sync.service';
-import { MatAnchor } from '@angular/material/button';
+import { MatAnchor, MatIconButton } from '@angular/material/button';
 import { NfseQueryService } from '../../services/nfse-query.service';
 import { NFSeDatabaseService } from '../../../../core/database/nfse-database.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -62,7 +62,8 @@ export class Consulta implements OnInit {
     'cpf_cnpj_tomador',
     'tomador',
     'valor',
-    'status'
+    'status',
+    'acoes'
   ];
 
   ngOnInit(): void {
