@@ -57,10 +57,10 @@ export class Consulta implements OnInit {
   protected readonly colunas = [
     'numero',
     'emissao',
-    'prestador',
     'cpf_cnpj_prestador',
-    'tomador',
+    'prestador',
     'cpf_cnpj_tomador',
+    'tomador',
     'valor',
     'status'
   ];

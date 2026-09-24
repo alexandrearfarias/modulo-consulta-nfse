@@ -68,28 +68,31 @@ export class FiltroConsulta {
       status: this.form.controls.status.value ?? '',
       adnStatus: this.form.controls.adnStatus.value ?? '',
 
-      chaveAcesso: this.form.controls.chaveAcesso.value?.trim() ?? '',
-      externalId: this.form.controls.externalId.value?.trim() ?? '',
+      chaveAcesso: this.form.controls.chaveAcesso.value ?? '',
+      externalId: this.form.controls.externalId.value ?? '',
 
       dataInicial: this.formatarData(this.form.controls.dataInicial.value),
       dataFinal: this.formatarData(this.form.controls.dataFinal.value),
 
-      prestadorCpfCnpj: this.formatarCpfCnpj(this.form.controls.prestadorCpfCnpj.value),
-      tomadorCpfCnpj: this.formatarCpfCnpj(this.form.controls.tomadorCpfCnpj.value)
+      prestadorCpfCnpj: this.form.controls.prestadorCpfCnpj.value ?? '',
+      tomadorCpfCnpj: this.form.controls.tomadorCpfCnpj.value ?? ''
     });
   }
 
   protected limpar(): void {
-    this.form.reset();
-
-    this.consultar.emit({
+    this.form.reset({
       status: '',
       adnStatus: '',
       chaveAcesso: '',
       externalId: '',
-      dataInicial: undefined,
-      dataFinal: undefined,
-    })
+      dataInicial: null,
+      dataFinal: null,
+      prestadorCpfCnpj: '',
+      tomadorCpfCnpj: ''
+    });
+
+    this.periodoInvalido.set(false);
+    this.consultar.emit({});
   }
 
   // auxiliar
@@ -118,10 +121,5 @@ export class FiltroConsulta {
     }
 
     return periodoInvalido;
-  }
-
-  private formatarCpfCnpj(value: string | null): string | undefined {
-    if (!value) { return undefined; }
-    return value.replace(/[^0-9a-zA-Z]/g, '');
   }
 }

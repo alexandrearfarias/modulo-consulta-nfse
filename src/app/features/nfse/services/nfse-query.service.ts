@@ -11,27 +11,31 @@ export class NfseQueryService {
     private readonly database = inject(NFSeDatabaseService);
 
     async consultar(filtros: FiltrosNfse, pagina = 0, tamanhoPagina = 10): Promise<ResultadoConsultaNfse> {
+        const filtrosNormalizados: FiltrosNfse = {
+            ...filtros,
+            chaveAcesso: filtros.chaveAcesso?.trim(),
+            externalId: filtros.externalId?.trim(),
+            prestadorCpfCnpj: filtros.prestadorCpfCnpj ? this.formatarCpfCnpj(filtros.prestadorCpfCnpj) : undefined,
+            tomadorCpfCnpj: filtros.tomadorCpfCnpj ? this.formatarCpfCnpj(filtros.tomadorCpfCnpj) : undefined
+        }; 
         // filtragem principal
-        let resultado = await this.buscarDados(filtros);
+        let resultado = await this.buscarDados(filtrosNormalizados);
 
         // filtragem secundaria
         resultado = resultado.filter(nfse => {
-            if (filtros.status && filtros.status !== nfse.status) {
+            if (filtrosNormalizados.adnStatus && filtrosNormalizados.adnStatus !== nfse.adn_status) {
                 return false;
             }
-            if (filtros.adnStatus && filtros.adnStatus !== nfse.adn_status) {
+            if (filtrosNormalizados.chaveAcesso && filtrosNormalizados.chaveAcesso !== nfse.chave_acesso) {
                 return false;
             }
-            if (filtros.chaveAcesso && filtros.chaveAcesso !== nfse.chave_acesso) {
+            if (filtrosNormalizados.externalId && filtrosNormalizados.externalId !== nfse.chave_acesso) {
                 return false;
             }
-            if (filtros.externalId && filtros.externalId !== nfse.chave_acesso) {
+            if (filtrosNormalizados.prestadorCpfCnpj && filtrosNormalizados.prestadorCpfCnpj !== nfse.emit_cpf_cnpj) {
                 return false;
             }
-            if (filtros.prestadorCpfCnpj && filtros.prestadorCpfCnpj !== nfse.prest_cpf_cnpj) {
-                return false;
-            }
-            if (filtros.tomadorCpfCnpj && filtros.tomadorCpfCnpj !== nfse.toma_cpf_cnpj) {
+            if (filtrosNormalizados.tomadorCpfCnpj && filtrosNormalizados.tomadorCpfCnpj !== nfse.toma_cpf_cnpj) {
                 return false;
             }
             
@@ -57,5 +61,10 @@ export class NfseQueryService {
             return this.database.buscarPorStatus(filtros.status);
         }
         return this.database.listar();
+    }
+
+    private formatarCpfCnpj(value: string | null): string | undefined {
+        if (!value) { return undefined; }
+        return value.replace(/[^0-9a-zA-Z]/g, '');
     }
 }

@@ -58,21 +58,21 @@
                             <th mat-header-cell *matHeaderCellDef>Emissão</th>
                             <td mat-cell *matCellDef="let nota">{{ nota.dh_emi | date: 'dd/MM/yyyy HH:mm' }}</td>
                         </ng-container>
-                        <ng-container matColumnDef="prestador">
-                            <th mat-header-cell *matHeaderCellDef>Prestador</th>
-                            <td mat-cell *matCellDef="let nota">{{ nota.emit_x_nome }}</td>
-                        </ng-container>
                         <ng-container matColumnDef="cpf_cnpj_prestador">
                             <th mat-header-cell *matHeaderCellDef>CPF/CNPJ Prestador</th>
                             <td mat-cell *matCellDef="let nota">{{ nota.emit_cpf_cnpj | document }}</td>
                         </ng-container>
-                        <ng-container matColumnDef="tomador">
-                            <th mat-header-cell *matHeaderCellDef>Tomador</th>
-                            <td mat-cell *matCellDef="let nota">{{ nota.toma_x_nome }}</td>
+                        <ng-container matColumnDef="prestador">
+                            <th mat-header-cell *matHeaderCellDef>Prestador</th>
+                            <td mat-cell *matCellDef="let nota">{{ nota.emit_x_nome }}</td>
                         </ng-container>
                         <ng-container matColumnDef="cpf_cnpj_tomador">
                             <th mat-header-cell *matHeaderCellDef>CPF/CNPJ Tomador</th>
                             <td mat-cell *matCellDef="let nota">{{ nota.toma_cpf_cnpj | document }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="tomador">
+                            <th mat-header-cell *matHeaderCellDef>Tomador</th>
+                            <td mat-cell *matCellDef="let nota">{{ nota.toma_x_nome }}</td>
                         </ng-container>
                         <ng-container matColumnDef="valor">
                             <th mat-header-cell *matHeaderCellDef>Valor Serviço R$</th>

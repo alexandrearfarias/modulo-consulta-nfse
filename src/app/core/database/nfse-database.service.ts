@@ -9,7 +9,7 @@ import { NfseMetadata } from "./nfse-metadata";
 })
 export class NFSeDatabaseService {
     private readonly dbName = 'nfse_moduledb';
-    private readonly dbVersion = 3;
+    private readonly dbVersion = 4;
     private readonly nfseStore = 'nfse';
     private readonly metadataStore = 'metadata';
     
@@ -48,8 +48,8 @@ export class NFSeDatabaseService {
                 if (!store.indexNames.contains('dh_emi')) {
                     store.createIndex('dh_emi', 'dh_emi', { unique: false });
                 }
-                if (!store.indexNames.contains('prest_cpf_cnpj')) {
-                    store.createIndex('prest_cpf_cnpj', 'prest_cpf_cnpj', { unique: false });
+                if (!store.indexNames.contains('emit_cpf_cnpj')) {
+                    store.createIndex('emit_cpf_cnpj', 'emit_cpf_cnpj', { unique: false });
                 }
                 if (!store.indexNames.contains('toma_cpf_cnpj')) {
                     store.createIndex('toma_cpf_cnpj', 'toma_cpf_cnpj', { unique: false });
