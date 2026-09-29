@@ -1,320 +1,347 @@
-@if(nfse(); as nota) {
-<div class="detalhe-container">
-    <mat-card>
+@if (carregando()) {
+<div class="estado-container">
+    <mat-spinner></mat-spinner>
+    <p>Caregando NFS-e...</p>
+</div>
+}
+@else if(nfse(); as nota) {
+<div class="detalhes-container">
+    <div class="detalhes-acoes">
+        <button matButton="outlined" type="button" (click)="voltar()">
+            <mat-icon>arrow_back</mat-icon> Voltar para a consulta
+        </button>
+    </div>
+    <mat-card class="nota-card">
         <mat-card-header>
-            <mat-card-title>NFSe {{ nota.n_dfse }}</mat-card-title>
-            <mat-card-subtitle>Chave de aceesso {{ nota.chave_acesso }}</mat-card-subtitle>
+            <mat-card-title>Detalhes da NFS-e</mat-card-title>
+            <mat-card-subtitle>Informações completas da nota fiscal</mat-card-subtitle>
         </mat-card-header>
 
         <mat-card-content>
-            <div class="informacoes">
+            <div class="detalhes-grid">
+                <!-- CARD DE IDENTIFICAÇÃO -->
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Identificação</mat-card-title>
+                        <mat-card-subtitle>NFSe {{ nota.n_dfse }} · Chave de acesso {{ nota.chave_acesso
+                            }}</mat-card-subtitle>
+                    </mat-card-header>
 
-                <div>
-                    <span class="label">Número</span>
-                    <span>{{ nota.n_dfse }}</span>
-                </div>
+                    <mat-card-content>
+                        <div class="informacoes">
 
-                <div>
-                    <span class="label">Série</span>
-                    <span>{{ nota.serie }}</span>
-                </div>
+                            <div>
+                                <span class="label">Número</span>
+                                <span>{{ nota.n_dfse }}</span>
+                            </div>
 
-                <div>
-                    <span class="label">Número DPS</span>
-                    <span>{{ nota.n_dps }}</span>
-                </div>
+                            <div>
+                                <span class="label">Série</span>
+                                <span>{{ nota.serie }}</span>
+                            </div>
 
-                <div>
-                    <span class="label">Data de emissão</span>
-                    <span>
-                        {{ nota.dh_emi | date:'dd/MM/yyyy HH:mm:ss' }}
-                    </span>
-                </div>
+                            <div>
+                                <span class="label">Número DPS</span>
+                                <span>{{ nota.n_dps }}</span>
+                            </div>
 
-                <div>
-                    <span class="label">Status</span>
-                    <span>{{ nota.status }}</span>
-                </div>
+                            <div>
+                                <span class="label">Data de emissão</span>
+                                <span>
+                                    {{ nota.dh_emi | date:'dd/MM/yyyy HH:mm:ss' }}
+                                </span>
+                            </div>
 
-                <div>
-                    <span class="label">Status ADN</span>
-                    <span>{{ nota.adn_status }}</span>
-                </div>
+                            <div>
+                                <span class="label">Status</span>
+                                <mat-chip [class]="statusClass(nota.status)">{{ statusLabel(nota.status) }}</mat-chip>
+                            </div>
+
+                            <div>
+                                <span class="label">Status ADN</span>
+                                <mat-chip [class]="adnStatusClass(nota.adn_status)">{{ adnStatusLabel(nota.adn_status)
+                                    }}</mat-chip>
+                            </div>
+
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+
+                <!-- CARD DE PROCESSAMENTO -->
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Processamento</mat-card-title>
+                    </mat-card-header>
+
+                    <mat-card-content>
+                        <div class="informacoes">
+
+                            <div>
+                                <span class="label">Data de processamento</span>
+                                <span>
+                                    {{ nota.dh_proc | date:'dd/MM/yyyy HH:mm:ss' }}
+                                </span>
+                            </div>
+
+                            <div>
+                                <span class="label">Código de status</span>
+                                <span>{{ nota.c_stat }}</span>
+                            </div>
+
+                            <div>
+                                <span class="label">Processo de emissão</span>
+                                <span>{{ nota.proc_emi }}</span>
+                            </div>
+
+                            <div>
+                                <span class="label">Ambiente</span>
+                                <span>{{ nota.tp_amb }}</span>
+                            </div>
+
+                            <div>
+                                <span class="label">Tipo de emissão</span>
+                                <span>{{ nota.tp_emis }}</span>
+                            </div>
+
+                            <div>
+                                <span class="label">Ambiente de geração</span>
+                                <span>{{ nota.amb_ger }}</span>
+                            </div>
+
+                            <div>
+                                <span class="label">Tipo de emitente</span>
+                                <span>{{ nota.tp_emit }}</span>
+                            </div>
+
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+
+                <!-- CARD DE PARTICIPANTES -->
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Prestador</mat-card-title>
+                    </mat-card-header>
+
+                    <mat-card-content>
+                        <div class="informacoes">
+
+                            <div>
+                                <span class="label">Nome</span>
+                                <span>{{ nota.prest_x_nome }}</span>
+                            </div>
+
+                            <div>
+                                <span class="label">CPF/CNPJ</span>
+                                <span>{{ nota.prest_cpf_cnpj | document }}</span>
+                            </div>
+
+                        </div>
+
+                    </mat-card-content>
+                </mat-card>
+
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Tomador</mat-card-title>
+                    </mat-card-header>
+
+                    <mat-card-content>
+                        <div class="informacoes">
+
+                            <div>
+                                <span class="label">Nome</span>
+                                <span>{{ nota.toma_x_nome }}</span>
+                            </div>
+
+                            <div>
+                                <span class="label">CPF/CNPJ</span>
+                                <span>{{ nota.toma_cpf_cnpj | document }}</span>
+                            </div>
+
+                        </div>
+
+                        <!-- CARD DE INTERMEDIARIO (se houver) -->
+                        @if (nota.interm_cpf_cnpj || nota.interm_x_nome) {
+                        <h3>Intermediário</h3>
+                        <div class="informacoes">
+
+                            <div>
+                                <span class="label">Nome</span>
+                                <span>{{ nota.interm_x_nome }}</span>
+                            </div>
+
+                            <div>
+                                <span class="label">CPF/CNPJ</span>
+                                <span>{{ nota.interm_cpf_cnpj | document }}</span>
+                            </div>
+
+                        </div>
+                        }
+                    </mat-card-content>
+                </mat-card>
+
+                <!-- CARD DE TRIBUTAÇÃO -->
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Tributação e classificação</mat-card-title>
+                    </mat-card-header>
+
+                    <mat-card-content>
+                        <div class="informacoes">
+
+                            <div>
+                                <span class="label">Código de tributação nacional</span>
+                                <span>{{ nota.c_trib_nac }}</span>
+                            </div>
+
+                            <div>
+                                <span class="label">Código de tributação municipal</span>
+                                <span>{{ nota.c_trib_mun }}</span>
+                            </div>
+
+                            <div>
+                                <span class="label">Código NBS</span>
+                                <span>{{ nota.c_nbs }}</span>
+                            </div>
+
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+
+                <!-- CARD DE VALORES -->
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Valores</mat-card-title>
+                    </mat-card-header>
+
+                    <mat-card-content>
+                        <div class="informacoes">
+
+                            <div>
+                                <span class="label">Valor do serviço</span>
+                                <span>{{ nota.v_serv | currency:'BRL' }}</span>
+                            </div>
+
+                            <div>
+                                <span class="label">Valor líquido</span>
+                                <span>{{ nota.v_liq | currency:'BRL' }}</span>
+                            </div>
+
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+
+                <!-- CARD DE LOCALIZAÇÃO -->
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Localização</mat-card-title>
+                    </mat-card-header>
+
+                    <mat-card-content>
+                        <div class="informacoes">
+
+                            <div>
+                                <span class="label">Local de emissão</span>
+                                <span>{{ nota.x_loc_emi }}</span>
+                            </div>
+
+                            <div>
+                                <span class="label">Código do município de emissão</span>
+                                <span>{{ nota.c_loc_emi }}</span>
+                            </div>
+
+                            <div>
+                                <span class="label">Local da prestação</span>
+                                <span>{{ nota.x_loc_prestacao }}</span>
+                            </div>
+
+                            <div>
+                                <span class="label">Código do município da prestação</span>
+                                <span>{{ nota.c_loc_prestacao }}</span>
+                            </div>
+
+                            <div>
+                                <span class="label">Local de incidência</span>
+                                <span>{{ nota.x_loc_incid }}</span>
+                            </div>
+
+                            <div>
+                                <span class="label">Código do município de incidência</span>
+                                <span>{{ nota.c_loc_incid }}</span>
+                            </div>
+
+                            <div>
+                                <span class="label">País da prestação</span>
+                                <span>{{ nota.c_pais_prestacao }}</span>
+                            </div>
+
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+
+                <!-- CARD DE DPS -->
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>DPS</mat-card-title>
+                    </mat-card-header>
+
+                    <mat-card-content>
+                        <div class="informacoes">
+
+                            <div>
+                                <span class="label">ID da DPS</span>
+                                <span>{{ nota.id_dps }}</span>
+                            </div>
+
+                            <div>
+                                <span class="label">Número da DPS</span>
+                                <span>{{ nota.n_dps }}</span>
+                            </div>
+
+                            <div>
+                                <span class="label">Série</span>
+                                <span>{{ nota.serie }}</span>
+                            </div>
+
+                        </div>
+                    </mat-card-content>
+                </mat-card>
 
             </div>
+
+            @if (nota.last_error) {
+            <section class="erro-nota" aria-labelledby="erro-nota-titulo">
+                <h3 id="erro-nota-titulo">Erro no processamento</h3>
+                <div class="informacoes">
+                    <div>
+                        <span class="label">Origem</span>
+                        <span>{{ nota.last_error.source }}</span>
+                    </div>
+                    <div>
+                        <span class="label">Código</span>
+                        <span>{{ nota.last_error.code }}</span>
+                    </div>
+                    <div>
+                        <span class="label">Mensagem</span>
+                        <span>{{ nota.last_error.message }}</span>
+                    </div>
+                    <div>
+                        <span class="label">Data</span>
+                        <span>{{ nota.last_error.at | date:'dd/MM/yyyy HH:mm:ss' }}</span>
+                    </div>
+                </div>
+            </section>
+            }
         </mat-card-content>
     </mat-card>
 </div>
-<div class="partes-container">
-    <mat-card>
-        <mat-card-header>
-            <mat-card-title>Prestador</mat-card-title>
-        </mat-card-header>
-
-        <mat-card-content>
-            <div class="informacoes">
-
-                <div>
-                    <span class="label">Nome</span>
-                    <span>{{ nota.prest_x_nome }}</span>
-                </div>
-
-                <div>
-                    <span class="label">CPF/CNPJ</span>
-                    <span>{{ nota.prest_cpf_cnpj | document }}</span>
-                </div>
-
-            </div>
-        </mat-card-content>
-    </mat-card>
-
-    <mat-card>
-        <mat-card-header>
-            <mat-card-title>Tomador</mat-card-title>
-        </mat-card-header>
-
-        <mat-card-content>
-            <div class="informacoes">
-
-                <div>
-                    <span class="label">Nome</span>
-                    <span>{{ nota.toma_x_nome }}</span>
-                </div>
-
-                <div>
-                    <span class="label">CPF/CNPJ</span>
-                    <span>{{ nota.toma_cpf_cnpj | document }}</span>
-                </div>
-
-            </div>
-        </mat-card-content>
-    </mat-card>
-    
-    @if (nota.interm_cpf_cnpj || nota.interm_x_nome) {
-    <mat-card>
-        <mat-card-header>
-            <mat-card-title>Intermediário</mat-card-title>
-        </mat-card-header>
-
-        <mat-card-content>
-            <div class="informacoes">
-
-                <div>
-                    <span class="label">Nome</span>
-                    <span>{{ nota.interm_x_nome }}</span>
-                </div>
-
-                <div>
-                    <span class="label">CPF/CNPJ</span>
-                    <span>{{ nota.interm_cpf_cnpj | document }}</span>
-                </div>
-
-            </div>
-        </mat-card-content>
-    </mat-card>
-    }
-
-    <mat-card>
-        <mat-card-header>
-            <mat-card-title>Valores</mat-card-title>
-        </mat-card-header>
-
-        <mat-card-content>
-            <div class="informacoes">
-
-                <div>
-                    <span class="label">Valor do serviço</span>
-                    <span>{{ nota.v_serv | currency:'BRL' }}</span>
-                </div>
-
-                <div>
-                    <span class="label">Valor líquido</span>
-                    <span>{{ nota.v_liq | currency:'BRL' }}</span>
-                </div>
-
-            </div>
-        </mat-card-content>
-    </mat-card>
-    <mat-card>
-        <mat-card-header>
-            <mat-card-title>Localização</mat-card-title>
-        </mat-card-header>
-
-        <mat-card-content>
-            <div class="informacoes">
-
-                <div>
-                    <span class="label">Local de emissão</span>
-                    <span>{{ nota.x_loc_emi }}</span>
-                </div>
-
-                <div>
-                    <span class="label">Código do município de emissão</span>
-                    <span>{{ nota.c_loc_emi }}</span>
-                </div>
-
-                <div>
-                    <span class="label">Local da prestação</span>
-                    <span>{{ nota.x_loc_prestacao }}</span>
-                </div>
-
-                <div>
-                    <span class="label">Código do município da prestação</span>
-                    <span>{{ nota.c_loc_prestacao }}</span>
-                </div>
-
-                <div>
-                    <span class="label">Local de incidência</span>
-                    <span>{{ nota.x_loc_incid }}</span>
-                </div>
-
-                <div>
-                    <span class="label">Código do município de incidência</span>
-                    <span>{{ nota.c_loc_incid }}</span>
-                </div>
-
-                <div>
-                    <span class="label">País da prestação</span>
-                    <span>{{ nota.c_pais_prestacao }}</span>
-                </div>
-
-            </div>
-        </mat-card-content>
-    </mat-card>
-    <mat-card>
-        <mat-card-header>
-            <mat-card-title>Processamento</mat-card-title>
-        </mat-card-header>
-
-        <mat-card-content>
-            <div class="informacoes">
-
-                <div>
-                    <span class="label">Data de processamento</span>
-                    <span>
-                        {{ nota.dh_proc | date:'dd/MM/yyyy HH:mm:ss' }}
-                    </span>
-                </div>
-
-                <div>
-                    <span class="label">Código de status</span>
-                    <span>{{ nota.c_stat }}</span>
-                </div>
-
-                <div>
-                    <span class="label">Processo de emissão</span>
-                    <span>{{ nota.proc_emi }}</span>
-                </div>
-
-                <div>
-                    <span class="label">Ambiente</span>
-                    <span>{{ nota.tp_amb }}</span>
-                </div>
-
-                <div>
-                    <span class="label">Tipo de emissão</span>
-                    <span>{{ nota.tp_emis }}</span>
-                </div>
-
-                <div>
-                    <span class="label">Ambiente de geração</span>
-                    <span>{{ nota.amb_ger }}</span>
-                </div>
-
-                <div>
-                    <span class="label">Tipo de emitente</span>
-                    <span>{{ nota.tp_emit }}</span>
-                </div>
-
-            </div>
-        </mat-card-content>
-    </mat-card>
-    <mat-card>
-        <mat-card-header>
-            <mat-card-title>Tributação e classificação</mat-card-title>
-        </mat-card-header>
-
-        <mat-card-content>
-            <div class="informacoes">
-
-                <div>
-                    <span class="label">Código de tributação nacional</span>
-                    <span>{{ nota.c_trib_nac }}</span>
-                </div>
-
-                <div>
-                    <span class="label">Código de tributação municipal</span>
-                    <span>{{ nota.c_trib_mun }}</span>
-                </div>
-
-                <div>
-                    <span class="label">Código NBS</span>
-                    <span>{{ nota.c_nbs }}</span>
-                </div>
-
-            </div>
-        </mat-card-content>
-    </mat-card>
-    <mat-card>
-        <mat-card-header>
-            <mat-card-title>DPS</mat-card-title>
-        </mat-card-header>
-
-        <mat-card-content>
-            <div class="informacoes">
-
-                <div>
-                    <span class="label">ID da DPS</span>
-                    <span>{{ nota.id_dps }}</span>
-                </div>
-
-                <div>
-                    <span class="label">Número da DPS</span>
-                    <span>{{ nota.n_dps }}</span>
-                </div>
-
-                <div>
-                    <span class="label">Série</span>
-                    <span>{{ nota.serie }}</span>
-                </div>
-
-            </div>
-        </mat-card-content>
-    </mat-card>
-    @if (nota.last_error) {
-    <mat-card>
-        <mat-card-header>
-            <mat-card-title>Erro no processamento</mat-card-title>
-        </mat-card-header>
-
-        <mat-card-content>
-            <div class="informacoes">
-
-                <div>
-                    <span class="label">Origem</span>
-                    <span>{{ nota.last_error.source }}</span>
-                </div>
-
-                <div>
-                    <span class="label">Código</span>
-                    <span>{{ nota.last_error.code }}</span>
-                </div>
-
-                <div>
-                    <span class="label">Mensagem</span>
-                    <span>{{ nota.last_error.message }}</span>
-                </div>
-
-                <div>
-                    <span class="label">Data</span>
-                    <span>
-                        {{ nota.last_error.at | date:'dd/MM/yyyy HH:mm:ss' }}
-                    </span>
-                </div>
-
-            </div>
-        </mat-card-content>
-    </mat-card>
-    }
+}
+@else {
+<div class="estado-contanier">
+    <mat-icon>search_off</mat-icon>
+    <h3>NFS-e não encontrada</h3>
+    <p>Não foi possível encontrar a NFSe solicitada no banco local.</p>
+    <button matButton="outlined" type="button" (click)="voltar()">Voltar</button>
 </div>
 }

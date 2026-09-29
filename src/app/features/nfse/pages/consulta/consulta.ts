@@ -11,7 +11,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { DocumentPipe } from '../../../../shared/pipes/document.pipe';
 import { NfseSyncService } from '../../services/nfse-sync.service';
-import { MatAnchor, MatIconButton } from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
+import { Router } from '@angular/router';
 import { NfseQueryService } from '../../services/nfse-query.service';
 import { NFSeDatabaseService } from '../../../../core/database/nfse-database.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -28,7 +29,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatIconModule,
     MatChipsModule,
     DocumentPipe,
-    MatAnchor
+    MatButtonModule
 ],
   selector: 'app-consulta',
   styleUrl: './consulta.scss',
@@ -40,6 +41,7 @@ export class Consulta implements OnInit {
   private readonly queryService = inject(NfseQueryService);
   private readonly databaseService = inject(NFSeDatabaseService);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly router = inject(Router);
 
   // parametros e objetos
   protected readonly nfse = signal<Nfse[]>([]);
@@ -159,5 +161,9 @@ export class Consulta implements OnInit {
     const valor = await this.databaseService.buscaMetadata('ultimaSincronizacao');
 
     this.ultimaSync.set(valor ?? null);
+  }
+
+  protected visualizar(nfse: Nfse): void {
+    this.router.navigate(['/nfse/detalhes', nfse.id]);
   }
 }

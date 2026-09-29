@@ -1,0 +1,129 @@
+@use '@angular/material' as mat;
+
+.detalhes-acoes {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 16px;
+}
+
+.detalhes-container {
+    width: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+.detalhes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 16px;
+}
+
+.nota-card {
+    border: 2px solid rgba(0, 0, 0, 0.24);
+    border-radius: 8px;
+    box-shadow: none;
+}
+
+.nota-card > mat-card-content {
+    padding-top: 16px;
+}
+
+.detalhes-grid mat-card {
+    min-width: 0;
+    border: 1px solid rgba(0, 0, 0, 0.16);
+    border-radius: 6px;
+    box-shadow: none;
+}
+
+.erro-nota {
+    margin-top: 16px;
+    padding: 16px;
+    border-left: 4px solid #b3261e;
+    border-radius: 4px;
+    background-color: #fef7f6;
+}
+
+.erro-nota h3 {
+    margin: 0 0 12px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.informacoes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 16px;
+}
+
+.informacoes > div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.informacoes .label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    opacity: 0.7;
+}
+
+.informacoes > div > span:last-child {
+    overflow-wrap: anywhere;
+}
+
+mat-card-content h3 {
+    margin: 0 0 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+mat-card-content h3:not(:first-child) {
+    margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+    .detalhes-grid {
+        grid-template-columns: 1fr;
+    }
+    .informacoes {
+        grid-template-columns: 1fr;
+    }
+}
+
+.status-processing {
+    @include mat.chips-overrides((
+        elevated-container-color: #fff3cd,
+        label-text-color: #856404
+    ));
+
+}
+
+.status-issued {
+    @include mat.chips-overrides((
+        elevated-container-color: #d4edda,
+        label-text-color: #155724
+    ));
+}
+
+.status-rejected,
+.status-error {
+    @include mat.chips-overrides((
+        elevated-container-color: #f8d7da,
+        label-text-color: #721c24
+    ));
+}
+
+.status-canceled {
+    @include mat.chips-overrides((
+        elevated-container-color: #e2e3e5,
+        label-text-color: #383d41
+    ));
+}
+
+.status-substituted {
+    @include mat.chips-overrides((
+        elevated-container-color: #d1ecf1,
+        label-text-color: #0c5460
+    ));
+}
