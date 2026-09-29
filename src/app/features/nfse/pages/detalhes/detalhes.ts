@@ -9,6 +9,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
+import { EmptyValuePipe } from '../../../../shared/pipes/empty-value.pipe';
 
 @Component({
   imports: [
@@ -19,7 +20,8 @@ import { MatChipsModule } from '@angular/material/chips';
     MatProgressSpinnerModule,
     MatIconModule,
     MatButtonModule,
-    MatChipsModule
+    MatChipsModule,
+    EmptyValuePipe
 ],
   selector: 'app-detalhes',
   styleUrl: './detalhes.scss',

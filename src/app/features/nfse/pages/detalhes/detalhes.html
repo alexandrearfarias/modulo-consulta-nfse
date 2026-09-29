@@ -32,17 +32,17 @@
 
                             <div>
                                 <span class="label">Número</span>
-                                <span>{{ nota.n_dfse }}</span>
+                                <span>{{ nota.n_dfse | emptyValue }}</span>
                             </div>
 
                             <div>
                                 <span class="label">Série</span>
-                                <span>{{ nota.serie }}</span>
+                                <span>{{ nota.serie | emptyValue }}</span>
                             </div>
 
                             <div>
                                 <span class="label">Número DPS</span>
-                                <span>{{ nota.n_dps }}</span>
+                                <span>{{ nota.n_dps | emptyValue }}</span>
                             </div>
 
                             <div>
@@ -128,12 +128,12 @@
 
                             <div>
                                 <span class="label">Nome</span>
-                                <span>{{ nota.prest_x_nome }}</span>
+                                <span>{{ nota.prest_x_nome | emptyValue }}</span>
                             </div>
 
                             <div>
                                 <span class="label">CPF/CNPJ</span>
-                                <span>{{ nota.prest_cpf_cnpj | document }}</span>
+                                <span>{{ nota.prest_cpf_cnpj | document | emptyValue }}</span>
                             </div>
 
                         </div>
@@ -151,12 +151,12 @@
 
                             <div>
                                 <span class="label">Nome</span>
-                                <span>{{ nota.toma_x_nome }}</span>
+                                <span>{{ nota.toma_x_nome | emptyValue }}</span>
                             </div>
 
                             <div>
                                 <span class="label">CPF/CNPJ</span>
-                                <span>{{ nota.toma_cpf_cnpj | document }}</span>
+                                <span>{{ nota.toma_cpf_cnpj | document | emptyValue }}</span>
                             </div>
 
                         </div>
@@ -168,12 +168,12 @@
 
                             <div>
                                 <span class="label">Nome</span>
-                                <span>{{ nota.interm_x_nome }}</span>
+                                <span>{{ nota.interm_x_nome | emptyValue }}</span>
                             </div>
 
                             <div>
                                 <span class="label">CPF/CNPJ</span>
-                                <span>{{ nota.interm_cpf_cnpj | document }}</span>
+                                <span>{{ nota.interm_cpf_cnpj | document | emptyValue }}</span>
                             </div>
 
                         </div>
@@ -192,17 +192,17 @@
 
                             <div>
                                 <span class="label">Código de tributação nacional</span>
-                                <span>{{ nota.c_trib_nac }}</span>
+                                <span>{{ nota.c_trib_nac | emptyValue }}</span>
                             </div>
 
                             <div>
                                 <span class="label">Código de tributação municipal</span>
-                                <span>{{ nota.c_trib_mun }}</span>
+                                <span>{{ nota.c_trib_mun | emptyValue }}</span>
                             </div>
 
                             <div>
                                 <span class="label">Código NBS</span>
-                                <span>{{ nota.c_nbs }}</span>
+                                <span>{{ nota.c_nbs | emptyValue }}</span>
                             </div>
 
                         </div>
@@ -243,37 +243,37 @@
 
                             <div>
                                 <span class="label">Local de emissão</span>
-                                <span>{{ nota.x_loc_emi }}</span>
+                                <span>{{ nota.x_loc_emi | emptyValue }}</span>
                             </div>
 
                             <div>
                                 <span class="label">Código do município de emissão</span>
-                                <span>{{ nota.c_loc_emi }}</span>
+                                <span>{{ nota.c_loc_emi | emptyValue }}</span>
                             </div>
 
                             <div>
                                 <span class="label">Local da prestação</span>
-                                <span>{{ nota.x_loc_prestacao }}</span>
+                                <span>{{ nota.x_loc_prestacao | emptyValue }}</span>
                             </div>
 
                             <div>
                                 <span class="label">Código do município da prestação</span>
-                                <span>{{ nota.c_loc_prestacao }}</span>
+                                <span>{{ nota.c_loc_prestacao | emptyValue }}</span>
                             </div>
 
                             <div>
                                 <span class="label">Local de incidência</span>
-                                <span>{{ nota.x_loc_incid }}</span>
+                                <span>{{ nota.x_loc_incid | emptyValue }}</span>
                             </div>
 
                             <div>
                                 <span class="label">Código do município de incidência</span>
-                                <span>{{ nota.c_loc_incid }}</span>
+                                <span>{{ nota.c_loc_incid | emptyValue }}</span>
                             </div>
 
                             <div>
                                 <span class="label">País da prestação</span>
-                                <span>{{ nota.c_pais_prestacao }}</span>
+                                <span>{{ nota.c_pais_prestacao | emptyValue }}</span>
                             </div>
 
                         </div>
