@@ -1,0 +1,46 @@
+.dashboard-container {
+    width: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+.descricao {
+    color: var(--mat-sys-on-surface-variant);
+    margin-bottom: 24px;
+}
+
+.indicadores {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+.indicador {
+    min-width: 0;
+
+    mat-card-content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 20px;
+    }
+
+    mat-icon {
+        color: var(--mat-sys-primary);
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+    }
+
+    .titulo {
+        color: var(--mat-sys-on-surface-variant);
+        font-size: 14px;
+    }
+
+    strong {
+      font-size: 24px;
+      font-weight: 600;
+      overflow-wrap: anywhere;  
+    }
+}

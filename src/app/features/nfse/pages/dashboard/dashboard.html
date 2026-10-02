@@ -1,0 +1,76 @@
+<div class="dashboard-container">
+    <h1>Dashboard de NFSe</h1>
+    <p>visão geral das notas armazenadas localmente</p>
+
+    @if (carregando()) {
+        <p>Carregando indicadores...</p>
+    }
+
+    @if(resumo(); as dados) {
+        <div class="indicadores">
+            <mat-card class="indicador">
+                <mat-card-content>
+                    <mat-icon>description</mat-icon>
+                    <span class="titulo">Total de NFSe</span>
+                    <strong>{{ dados.total }}</strong>
+                </mat-card-content>
+            </mat-card>
+
+            <mat-card class="indicador">
+                <mat-card-content>
+                    <mat-icon>check-circle</mat-icon>
+                    <span class="titulo">Emitidas</span>
+                    <strong>{{ dados.emitidas }}</strong>
+                </mat-card-content>
+            </mat-card>
+
+            <mat-card class="indicador">
+                <mat-card-content>
+                    <mat-icon>hourglass_empty</mat-icon>
+                    <span class="titulo">Em processamento</span>
+                    <strong>{{ dados.processamento }}</strong>
+                </mat-card-content>
+            </mat-card>
+
+            <mat-card class="indicador">
+                <mat-card-content>
+                    <mat-icon>cancel</mat-icon>
+                    <span class="titulo">Rejeitadas</span>
+                    <strong>{{ dados.rejeitadas }}</strong>
+                </mat-card-content>
+            </mat-card>
+
+            <mat-card class="indicador">
+                <mat-card-content>
+                    <mat-icon>block</mat-icon>
+                    <span class="titulo">Canceladas</span>
+                    <strong>{{ dados.canceladas }}</strong>
+                </mat-card-content>
+            </mat-card>
+
+            <mat-card class="indicador">
+                <mat-card-content>
+                    <mat-icon>swap_horiz</mat-icon>
+                    <span class="titulo">Substituídas</span>
+                    <strong>{{ dados.substituidas }}</strong>
+                </mat-card-content>
+            </mat-card>
+
+            <mat-card class="indicador">
+                <mat-card-content>
+                    <mat-icon>error</mat-icon>
+                    <span class="titulo">Erros</span>
+                    <strong>{{ dados.erros }}</strong>
+                </mat-card-content>
+            </mat-card>
+
+            <mat-card class="indicador">
+                <mat-card-content>
+                    <mat-icon>payments</mat-icon>
+                    <span class="titulo">Valor total dos Serviços</span>
+                    <strong>{{ dados.valorTotal | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</strong>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    }
+</div>

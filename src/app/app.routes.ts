@@ -12,13 +12,19 @@ export const routes: Routes = [
             {
                 path: '',
                 loadComponent: async () => {
-                    return import('./features/nfse/pages/consulta/consulta').then(m => m.Consulta)
+                    return import('./features/nfse/pages/consulta/consulta').then(m => m.Consulta);
                 }
             },
             {
                 path: 'detalhes/:id',
                 loadComponent: async () => {
-                    return import('./features/nfse/pages/detalhes/detalhes').then(m => m.Detalhes)
+                    return import('./features/nfse/pages/detalhes/detalhes').then(m => m.Detalhes);
+                }
+            },
+            {
+                path: 'dashboard',
+                loadComponent: async () => {
+                    return import('./features/nfse/pages/dashboard/dashboard').then(m => m.Dashboard);
                 }
             }
         ]
