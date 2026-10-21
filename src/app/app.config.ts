@@ -6,6 +6,7 @@ import { routes } from './app.routes';
 import { authInterceptor } from './core/auth/auth.interceptor';
 import  localePtBr  from '@angular/common/locales/pt'
 import { registerLocaleData } from '@angular/common';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 registerLocaleData(localePtBr, 'pt-BR')
 
@@ -16,5 +17,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptors([authInterceptor])
     ),
+    provideCharts(withDefaultRegisterables()),
   ]
 };

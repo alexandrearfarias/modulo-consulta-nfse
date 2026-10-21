@@ -2,75 +2,111 @@
     <h1>Dashboard de NFSe</h1>
     <p>visão geral das notas armazenadas localmente</p>
 
+    <div class="acoes-dashboard">
+        <button mat-flat-button (click)="atualizarIndicadores()" [disabled]="carregando()">
+            <mat-icon>refresh</mat-icon>
+            Atualizar indicadores
+        </button>
+    </div>
+
     @if (carregando()) {
-        <p>Carregando indicadores...</p>
+    <p>Carregando indicadores...</p>
     }
 
     @if(resumo(); as dados) {
-        <div class="indicadores">
-            <mat-card class="indicador">
-                <mat-card-content>
-                    <mat-icon>description</mat-icon>
-                    <span class="titulo">Total de NFSe</span>
-                    <strong>{{ dados.total }}</strong>
-                </mat-card-content>
-            </mat-card>
+    <div class="indicadores">
+        <mat-card class="indicador">
+            <mat-card-content>
+                <mat-icon>description</mat-icon>
+                <span class="titulo">Total de NFSe</span>
+                <strong>{{ dados.total }}</strong>
+            </mat-card-content>
+        </mat-card>
 
-            <mat-card class="indicador">
-                <mat-card-content>
-                    <mat-icon>check-circle</mat-icon>
-                    <span class="titulo">Emitidas</span>
-                    <strong>{{ dados.emitidas }}</strong>
-                </mat-card-content>
-            </mat-card>
+        <mat-card class="indicador">
+            <mat-card-content>
+                <mat-icon>check-circle</mat-icon>
+                <span class="titulo">Emitidas</span>
+                <strong>{{ dados.emitidas }}</strong>
+            </mat-card-content>
+        </mat-card>
 
-            <mat-card class="indicador">
-                <mat-card-content>
-                    <mat-icon>hourglass_empty</mat-icon>
-                    <span class="titulo">Em processamento</span>
-                    <strong>{{ dados.processamento }}</strong>
-                </mat-card-content>
-            </mat-card>
+        <mat-card class="indicador">
+            <mat-card-content>
+                <mat-icon>hourglass_empty</mat-icon>
+                <span class="titulo">Em processamento</span>
+                <strong>{{ dados.processamento }}</strong>
+            </mat-card-content>
+        </mat-card>
 
-            <mat-card class="indicador">
-                <mat-card-content>
-                    <mat-icon>cancel</mat-icon>
-                    <span class="titulo">Rejeitadas</span>
-                    <strong>{{ dados.rejeitadas }}</strong>
-                </mat-card-content>
-            </mat-card>
+        <mat-card class="indicador">
+            <mat-card-content>
+                <mat-icon>cancel</mat-icon>
+                <span class="titulo">Rejeitadas</span>
+                <strong>{{ dados.rejeitadas }}</strong>
+            </mat-card-content>
+        </mat-card>
 
-            <mat-card class="indicador">
-                <mat-card-content>
-                    <mat-icon>block</mat-icon>
-                    <span class="titulo">Canceladas</span>
-                    <strong>{{ dados.canceladas }}</strong>
-                </mat-card-content>
-            </mat-card>
+        <mat-card class="indicador">
+            <mat-card-content>
+                <mat-icon>block</mat-icon>
+                <span class="titulo">Canceladas</span>
+                <strong>{{ dados.canceladas }}</strong>
+            </mat-card-content>
+        </mat-card>
 
-            <mat-card class="indicador">
-                <mat-card-content>
-                    <mat-icon>swap_horiz</mat-icon>
-                    <span class="titulo">Substituídas</span>
-                    <strong>{{ dados.substituidas }}</strong>
-                </mat-card-content>
-            </mat-card>
+        <mat-card class="indicador">
+            <mat-card-content>
+                <mat-icon>swap_horiz</mat-icon>
+                <span class="titulo">Substituídas</span>
+                <strong>{{ dados.substituidas }}</strong>
+            </mat-card-content>
+        </mat-card>
 
-            <mat-card class="indicador">
-                <mat-card-content>
-                    <mat-icon>error</mat-icon>
-                    <span class="titulo">Erros</span>
-                    <strong>{{ dados.erros }}</strong>
-                </mat-card-content>
-            </mat-card>
+        <mat-card class="indicador">
+            <mat-card-content>
+                <mat-icon>error</mat-icon>
+                <span class="titulo">Erros</span>
+                <strong>{{ dados.erros }}</strong>
+            </mat-card-content>
+        </mat-card>
 
-            <mat-card class="indicador">
-                <mat-card-content>
-                    <mat-icon>payments</mat-icon>
-                    <span class="titulo">Valor total dos Serviços</span>
-                    <strong>{{ dados.valorTotal | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</strong>
-                </mat-card-content>
-            </mat-card>
-        </div>
+        <mat-card class="indicador">
+            <mat-card-content>
+                <mat-icon>payments</mat-icon>
+                <span class="titulo">Valor total dos Serviços</span>
+                <strong>{{ dados.valorTotal | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</strong>
+            </mat-card-content>
+        </mat-card>
+
+    </div>
+
+    <div class="graficos-grid">
+        <mat-card class="grafico-card">
+            <mat-card-header>
+                <mat-card-title>Distribuição por Status</mat-card-title>
+                <mat-card-subtitle>Quantidade de NFSe por situação</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="grafico-container">
+                    <canvas baseChart type="doughnut" [data]="graficoStatusData()"
+                        [options]="graficoStatusOptions"></canvas>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    
+        <mat-card class="grafico-card">
+            <mat-card-header>
+                <mat-card-title>Evolução Mensal</mat-card-title>
+                <mat-card-subtitle>Quantidade de NFSe por mês de emissão</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="grafico-container">
+                    <canvas baseChart type="line" [data]="graficoMensalData()"
+                        [options]="graficoMensalOptions"></canvas>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
     }
 </div>

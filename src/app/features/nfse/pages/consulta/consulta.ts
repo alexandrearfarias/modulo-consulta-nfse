@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
 import { NfseQueryService } from '../../services/nfse-query.service';
 import { NFSeDatabaseService } from '../../../../core/database/nfse-database.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { NfseSyncEventService } from '../../../../core/services/nfse-sync-event.service';
 
 @Component({
   imports: [
@@ -42,6 +43,7 @@ export class Consulta implements OnInit {
   private readonly databaseService = inject(NFSeDatabaseService);
   private readonly snackBar = inject(MatSnackBar);
   private readonly router = inject(Router);
+  private readonly syncEvents = inject(NfseSyncEventService);
 
   // parametros e objetos
   protected readonly nfse = signal<Nfse[]>([]);
@@ -112,6 +114,8 @@ export class Consulta implements OnInit {
         'Fechar', 
         { duration: 4000, verticalPosition: 'top' }
       );
+
+      this.syncEvents.notificarSincronizacaoConcluida();
     } catch (error) {
       console.error('Erro na sincronização', error);
     } finally {
